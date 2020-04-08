@@ -10,7 +10,6 @@ var Modelo = function () {
   this.preguntaBorrada = new Evento(this);
   this.todoBorrado = new Evento(this);
   this.preguntaEditada = new Evento(this);
-  this.votoAgregado = new Evento(this)
 
   this.inicializarStorage();
 };
@@ -40,23 +39,27 @@ Modelo.prototype = {
   //Hacemos el metodo borrarPregunta
   borrarPregunta: function (id) {
     let preguntaABorrar = this.preguntas.findIndex(element => element.id == id);
+    if (this.preguntas[preguntaABorrar].id == id) {
     this.preguntas.splice(preguntaABorrar, 1);
     this.guardar(this.preguntas);
     this.preguntaBorrada.notificar();
+    }
   },
 
   // Se borran todas las preguntas
   borrarTodo: function () {
-    this.preguntas = [];
-    this.guardar(this.preguntas);
-    this.todoBorrado.notificar();
+    if (confirm("Está a punto de eliminar todas las preguntas. ¿Desea continuar?")) {
+      this.preguntas = [];
+      this.guardar(this.preguntas);
+      this.todoBorrado.notificar();
+    }
   },
 
   // Se edita una pregunta seleccionada
   editarPregunta: function (id) {
     let preguntaAEditar = this.preguntas.findIndex(element => element.id == id);
-    let nuevaPreguntaEditada = prompt('Ingrese la nueva pregunta');
-    if (nuevaPreguntaEditada) {
+    if (this.preguntas[preguntaAEditar].id == id) {
+      let nuevaPreguntaEditada = prompt('Ingrese la nueva pregunta');
       this.preguntas[preguntaAEditar].textoPregunta = nuevaPreguntaEditada;
       this.guardar(this.preguntas);
       this.preguntaEditada.notificar();
@@ -68,10 +71,9 @@ Modelo.prototype = {
     var indexPreguntaVotada = this.preguntas.findIndex(element => element.textoPregunta === nombrePregunta)
 
     var indexRespuestaVotada = this.preguntas[indexPreguntaVotada].cantidadPorRespuesta.findIndex(element => element.textoRespuesta === respuestaSeleccionada)
-
-    return this.preguntas[indexPreguntaVotada].cantidadPorRespuesta[indexRespuestaVotada].cantidad++;
-    this.guardarVotos(this.preguntas.cantidadPorRespuesta);
-    this.votoAgregado.notificar();
+    
+    this.preguntas[indexPreguntaVotada].cantidadPorRespuesta[indexRespuestaVotada].cantidad++;
+    this.guardar(this.preguntas);
   },
 
   //se guardan las preguntas
@@ -79,16 +81,9 @@ Modelo.prototype = {
     localStorage.setItem('preguntas', JSON.stringify(preguntas));
   },
 
-  guardarVotos: function (votos) {
-    localStorage.setItem('votos', JSON.stringify(votos));
-  },
-
   inicializarStorage: function () {
     if (localStorage.getItem('preguntas')) {
       this.preguntas = JSON.parse(localStorage.getItem('preguntas'));
     }
-    if (localStorage.getItem('votos')) {
-      this.preguntas.cantidadPorRespuesta = JSON.parse(localStorage.getItem('votos'));
-    }
-  }
+  },
 };

@@ -23,10 +23,6 @@ var VistaUsuario = function (modelo, controlador, elementos) {
   this.modelo.preguntaEditada.suscribir(function () {
     contexto.reconstruirLista();
   });
-
-  this.modelo.votoAgregado.suscribir(function () {
-    contexto.reconstruirLista();
-});
 };
 
 VistaUsuario.prototype = {

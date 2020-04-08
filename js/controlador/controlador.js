@@ -15,9 +15,7 @@ Controlador.prototype = {
   },
 
   borrarTodo: function () {
-    if (confirm("Esta por borrar todas las preguntas. Esta seguro?")) {
       this.modelo.borrarTodo();
-    }
   },
 
   editarPregunta: function (id) {

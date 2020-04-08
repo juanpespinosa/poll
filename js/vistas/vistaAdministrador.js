@@ -82,12 +82,15 @@ VistaAdministrador.prototype = {
       contexto.controlador.agregarPregunta(value, respuestas);
     });
 
-    //asociar el resto de los botones a eventos
+    //Asociar el resto de los botones a eventos
 
     e.botonBorrarPregunta.click(function () {
       var id = parseInt($('.list-group-item.active').attr('id'));
+      if (isNaN(id)) {
+        alert('Seleccione la pregunta que desea borrar.')
+      } else {
       contexto.controlador.borrarPregunta(id);
-
+      }
     });
 
     e.borrarTodo.click(function () {
@@ -96,7 +99,11 @@ VistaAdministrador.prototype = {
 
     e.botonEditarPregunta.click(function () {
       var id = parseInt($('.list-group-item.active').attr('id'));
+      if (isNaN(id)) {
+        alert('Seleccione una pregunta para editar.')
+      } else {
       contexto.controlador.editarPregunta(id);
+      }
     });
   },
 
